@@ -3,51 +3,40 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { ScrollView } from 'react-native-gesture-handler';
 import * as WebBrowser from 'expo-web-browser';
 
-import { MonoText } from '../components/StyledText';
+import tcombForm from 'tcomb-form-native';
+
+import { PageTitle } from '../components/PageTitle';
+
+
+var Form = tcombForm.form.Form
+var options = {}; // optional rendering options (see documentation)
+// here we are: define your domain model
+var User = tcombForm.struct({
+    email: tcombForm.String,
+    password: tcombForm.String,
+});
+
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
+        
 
         <View style={styles.getStartedContainer}>
           <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
+          <PageTitle style={styles.getStartedText}>Login</PageTitle>
         </View>
 
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-          </TouchableOpacity>
+        <View style={styles.titleContainer}>
+          <Form refs='form' type={User} options={options}/>
         </View>
+      
+
+        
       </ScrollView>
 
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
 
-        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
-        </View>
-      </View>
     </View>
   );
 }
@@ -58,24 +47,11 @@ HomeScreen.navigationOptions = {
 
 function DevelopmentModeNotice() {
   if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
+    
 
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use useful development
-        tools. {learnMoreButton}
-      </Text>
-    );
+    return null;// show something in dev mode
   } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
+    return null;// show something in production mode
   }
 }
 
@@ -116,9 +92,17 @@ const styles = StyleSheet.create({
     marginTop: 3,
     marginLeft: -10,
   },
+  titleContainer: {
+    margin: 50,
+  },
   getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+    // alignItems: 'flex-start',
+    justifyContent: 'center',
+
+    
+    marginHorizontal: 60,
+    marginTop: 50,
+  
   },
   homeScreenFilename: {
     marginVertical: 7,
